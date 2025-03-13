@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* contact complement */
+.form-group {
+    @apply relative z-0;
+}
+  
+.form-label {
+    @apply absolute left-10 -top-3.5 text-sm text-gray-400 bg-gray-900 px-2 transition-all duration-200 
+           peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base 
+           peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-indigo-400 z-10;
+}
+  
+  .form-input {
+    @apply w-full pl-10 pr-4 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-xl 
+           focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900/30 
+           text-gray-300 placeholder-transparent transition-all duration-200;
+}
+  
+  .btn-primary {
+    @apply px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-500 text-white 
+           rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-600 
+           transition-all shadow-lg hover:shadow-indigo-500/20;
+}
+  
+  /* Animation des icônes */
+  .bx-send {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+  
+.pattern-dark {
+    background-image: linear-gradient(to right, rgba(17, 24, 39, 0.8) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(17, 24, 39, 0.8) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.animate-text-glow {
+  animation: text-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow {
+  0% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+.typing-effect {
+  font-family: monospace;
+  border-right: 2px solid;
+  animation: typing 1s steps(40) infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-pulse-slow {
+  animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.2; }
+}
+@keyframes text-glow {
+  0% { text-shadow: 0 0 10px rgba(129, 140, 248, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(129, 140, 248, 0.5); }
+  100% { text-shadow: 0 0 10px rgba(129, 140, 248, 0.3); }
+}
+
+.animate-text-glow {
+  animation: text-glow 3s ease-in-out infinite;
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+

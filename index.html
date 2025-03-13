@@ -1,0 +1,984 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- metadonne complementaire -->
+  <meta name="theme-color" content="#6366f1">
+  <link href="./dist/output.css" rel="stylesheet">
+  <!-- boxi-cones -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+
+<!-- lien swiper -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<!-- style complementaire -->
+<style>
+  /* Animations globales */
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.2; }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Contrôles Swiper verticaux */
+.swiper-controls-vertical {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.swiper-button-prev-vertical,
+.swiper-button-next-vertical {
+  background: rgba(55, 65, 81, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button-prev-vertical:hover,
+.swiper-button-next-vertical:hover {
+  background: rgba(79, 70, 229, 0.3);
+  transform: scale(1.1) translateZ(0);
+}
+
+/* Pagination Swiper */
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 2rem;
+}
+
+.swiper-pagination-bullet {
+  transition: transform 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: rgba(99, 102, 241, 0.9) !important;
+  transform: scale(1.2);
+}
+
+/* État désactivé */
+.swiper-button-disabled {
+  opacity: 0.3 !important;
+  pointer-events: all; /* Permet le hover pour l'accessibilité */
+}
+
+/* Navigation header */
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #6366f1;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::before {
+  width: 100%;
+}
+
+/* Formulaire de contact */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+  transform: translateY(-24px) scale(0.85);
+  color: #818cf8;
+}
+
+/* Validation en temps réel */
+input:valid:not(:placeholder-shown) {
+  border-color: #4ade80;
+}
+
+input:invalid:not(:placeholder-shown) {
+  border-color: #f87171;
+}
+
+/* Footer */
+.footer-link {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #818cf8;
+}
+
+.social-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon:hover {
+  transform: scale(1.15);
+}
+
+/* Accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Corrections spécifiques Swiper */
+.swiper-testimonial {
+  height: 600px;
+  overflow: hidden;
+}
+
+.swiper-slide {
+  opacity: 0.5;
+  transform: scale(0.95);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* diagramme style */
+#performanceChart {
+  opacity: 0;
+  animation: chart-fade-in 1s ease-out forwards;
+  animation-delay: 300ms;
+}
+
+@keyframes chart-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans antialiased">
+
+<!-- header nav bar -->
+<header class="fixed w-full top-0 z-50 bg-gray-900/80 backdrop-blur-md transition-all duration-300 border-b border-gray-800/50">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Navigation principale">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="#home" class="flex items-center gap-2 font-bold hover:text-indigo-400 transition-colors">
+        <img src="src/image/--logo--.png" 
+             alt="Logo Portfolio - Retour à l'accueil" 
+             class="h-10 w-10 rounded-lg border border-gray-700/50"
+             loading="lazy"
+             width="50"
+             height="50">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300 text-xl">
+          CyberSecPro
+        </span>
+      </a>
+
+      <!-- Navigation desktop -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="#home" 
+           class="nav-link relative py-2 px-3 text-gray-300 hover:text-indigo-400 transition-colors
+                  before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 
+                  before:bg-indigo-400 before:transition-all before:duration-300 hover:before:w-full">
+          Accueil
+        </a>
+        <a href="#projects" 
+           class="nav-link relative py-2 px-3 text-gray-300 hover:text-indigo-400 transition-colors
+                  before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 
+                  before:bg-indigo-400 before:transition-all before:duration-300 hover:before:w-full">
+          Projets
+        </a>
+        <a href="#contact" 
+           class="nav-link relative py-2 px-3 text-gray-300 hover:text-indigo-400 transition-colors
+                  before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 
+                  before:bg-indigo-400 before:transition-all before:duration-300 hover:before:w-full">
+          Contact
+        </a>
+        <a href="#services" 
+           class="nav-link relative py-2 px-3 text-gray-300 hover:text-indigo-400 transition-colors
+                  before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 
+                  before:bg-indigo-400 before:transition-all before:duration-300 hover:before:w-full">
+          Services
+        </a>
+        <a href="#testimonials"
+           class="nav-link relative py-2 px-3 text-gray-300 hover:text-indigo-400 transition-colors
+                  before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 
+                  before:bg-indigo-400 before:transition-all before:duration-300 hover:before:w-full">
+          Témoignage
+        </a>
+      </div>
+
+      <!-- Bouton menu mobile -->
+      <button 
+        id="menu-toggle"
+        class="md:hidden p-2 rounded-lg hover:bg-gray-800/50 transition-colors"
+        aria-label="Menu mobile"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menu mobile -->
+    <div 
+      id="mobile-menu"
+      class="md:hidden absolute top-full left-0 right-0 bg-gray-900/95 backdrop-blur-lg overflow-hidden 
+             transition-all duration-300 max-h-0 opacity-0"
+      role="menu"
+      aria-labelledby="menu-toggle"
+    >
+      <div class="px-4 py-4 space-y-2">
+        <a href="#home" 
+           class="block py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800/50 hover:text-indigo-400 transition-colors"
+           role="menuitem">
+          Accueil
+        </a>
+        <a href="#projects" 
+           class="block py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800/50 hover:text-indigo-400 transition-colors"
+           role="menuitem">
+          Projets
+        </a>
+        <a href="#contact" 
+           class="block py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800/50 hover:text-indigo-400 transition-colors"
+           role="menuitem">
+          Contact
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Section Hero -->
+<section class="relative py-28 bg-gradient-to-br from-gray-900 to-gray-950 overflow-hidden" id="home" aria-labelledby="hero-heading">
+  <!-- Fond animé -->
+  <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDBoMjAwdjIwMEgwek0yMDAgMjAwaDIwMHYyMDBIMjAwek0wIDQwMGgyMDB2MjAwSDB6TTIwMCA2MDBoMjAwdjIwMEgyMDB6TTQwMCAwaDIwMHYyMDBINDAwek00MDAgNDAwaDIwMHYyMDBINDAweiIgc3Ryb2tlPSIjM2I0MDUxIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=')]"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row items-center gap-14 xl:gap-28">
+      <!-- Texte -->
+      <header class="lg:w-1/2 text-center lg:text-left space-y-8 relative z-10">
+        <div class="space-y-8">
+          <h1 id="hero-heading" class="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold leading-tight">
+            <span class="block text-gray-100 mb-2 md:mb-3 animate-fade-in-down opacity-0">
+              <span aria-hidden="true">Hello, je suis</span>
+            </span>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-400 inline-block py-2 animate-text-glow hover:bg-gradient-to-l transition-all duration-500 cursor-default">
+              <span class="sr-only">ELHA</span>
+              <span aria-hidden="true" class="inline-block hover:scale-105 transition-transform">ELHA</span>
+            </span>
+          </h1>
+          
+          <div class="mt-6 md:mt-8">
+            <p class="text-2xl md:text-3xl xl:text-4xl font-semibold text-gray-100">
+              <span class="block mb-3">Expert en</span>
+              <div class="min-h-[2.5rem] relative inline-block">
+                <span id="typed-text" class="text-indigo-400 font-mono font-bold text-2xl" 
+                      role="status"
+                      aria-live="polite"></span>
+                <span class="cursor-blink absolute -right-3 top-0 text-indigo-400" aria-hidden="true">|</span>
+              </div>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+          <a href="image/monCv.pdf" download 
+             class="btn-primary inline-flex items-center gap-3 px-8 py-4 hover:scale-[1.02] transition-transform group">
+            <svg class="w-6 h-6 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Télécharger CV
+          </a>
+        </div>
+
+        <!-- Réseaux sociaux -->
+        <nav aria-label="Réseaux sociaux">
+          <div class="mt-14">
+            <p class="text-gray-300 mb-6 font-medium">Suivez mes contributions :</p>
+            <div class="flex justify-center lg:justify-start gap-5">
+              <a href="#" class="social-icon hover:bg-indigo-500/10 rounded-lg p-3 transition-all" 
+                 aria-label="Profil LinkedIn">
+                <svg class="w-8 h-8 text-indigo-400 hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon hover:bg-indigo-500/10 rounded-lg p-3 transition-all" 
+                 aria-label="Profil GitHub">
+                <svg class="w-8 h-8 text-indigo-400 hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <!-- Image -->
+      <div class="lg:w-1/2 mt-12 lg:mt-0 relative">
+        <div class="relative max-w-2xl mx-auto">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-blue-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div class="relative rounded-2xl shadow-2xl overflow-hidden border-2 border-gray-800/50 hover:border-indigo-500/30 transition-all duration-300 group">
+            <img src="/src/image/ELHA1.png" 
+                 alt="ElHa - Expert en cybersécurité" 
+                 class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-300"
+                 loading="eager"
+                 width="720"
+                 height="720"
+                 decoding="async">
+            <!-- Badge de certification -->
+            <div class="absolute bottom-4 right-4 bg-gray-900/80 px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-sm">
+              <span class="text-indigo-400 text-sm font-medium">CISSP Certifié</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Services -->
+<section class="relative py-20 bg-gradient-to-b from-gray-900 to-gray-950" aria-labelledby="services-heading" id="services">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 space-y-4">
+      <span class="inline-block text-indigo-400 font-semibold uppercase tracking-widest text-sm">Expertises clés</span>
+      <h2 id="services-heading" class="text-4xl font-bold text-white">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-300">Services</span> Spécialisés
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto text-lg">Solutions sur mesure pour protéger vos actifs numériques</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Carte Service 1 -->
+      <article class="group relative bg-gray-800 rounded-2xl p-8 transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-900/20">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative">
+          <div class="w-24 h-24 mb-8 mx-auto bg-indigo-900/30 rounded-xl p-4">
+            <img src="/src/image/securiteReseaux.png" 
+                 alt="Icône sécurité réseau" 
+                 class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                 loading="lazy">
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4 text-center">Sécurité Réseau</h3>
+          <ul class="space-y-3 text-gray-300">
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Architecture Zero Trust
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Détection d'intrusions (NIDS/HIDS)
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Carte Service 2 -->
+      <article class="group relative bg-gray-800 rounded-2xl p-8 transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-900/20">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative">
+          <div class="w-24 h-24 mb-8 mx-auto bg-indigo-900/30 rounded-xl p-4">
+            <img src="/src/image/donnee.png" 
+                 alt="Icône protection des données" 
+                 class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                 loading="lazy">
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4 text-center">Protection des Données</h3>
+          <ul class="space-y-3 text-gray-300">
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Conformité RGPD/CCPA
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Chiffrement AES-256
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Carte Service 3 -->
+      <article class="group relative bg-gray-800 rounded-2xl p-8 transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-900/20">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative">
+          <div class="w-24 h-24 mb-8 mx-auto bg-indigo-900/30 rounded-xl p-4">
+            <img src="/src/image/infrastructures.png" 
+                 alt="Icône sécurité industrielle" 
+                 class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                 loading="lazy">
+          </div>
+          <h3 class="text-xl font-bold text-white mb-4 text-center">Sécurité Industrielle</h3>
+          <ul class="space-y-3 text-gray-300">
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Protection SCADA/ICS
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="flex-shrink-0 w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              Détection d'anomalies OT
+            </li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Section Projets -->
+<section class="px-5 py-20 mx-auto max-w-7xl" id="projects" aria-label="Projets récents">
+  <div class="text-center mb-16">
+    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+      <span class="text-indigo-400">Projets</span> 
+      <span class="text-white/90">Récents</span>
+    </h2>
+    
+    <div class="max-w-3xl mx-auto space-y-4">
+      <p class="text-gray-300 leading-relaxed">
+        En 2024, j'ai dirigé plusieurs initiatives clés en cybersécurité :
+      </p>
+      <ul class="text-gray-400 list-disc list-outside space-y-3 text-left ml-6">
+        <li>
+          <strong class="text-indigo-300">Projet HiSec</strong> : Sécurisation des réseaux nouvelle génération 
+          avec politiques de sécurité end-to-end
+        </li>
+        <li>
+          <strong class="text-indigo-300">CI/CD Secure</strong> : Intégration de contrôles de sécurité 
+          automatisés dans les pipelines DevOps
+        </li>
+        <li>
+          <strong class="text-indigo-300">ICS Shield</strong> : Protection avancée des systèmes industriels 
+          contre les cybermenaces critiques
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Grille de projets -->
+  <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+    <!-- Carte Projet 1 -->
+    <article class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2 shadow-xl shadow-indigo-900/10">
+      <div class="relative h-80">
+        <img 
+          src="/src/image/reseauxProjets.png" 
+          alt="Interface de gestion de sécurité réseau" 
+          class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 text-left">
+          <h3 class="text-xl font-bold text-white mb-2">HiSec Network Suite</h3>
+          <p class="text-gray-300 line-clamp-2">Plateforme de gestion unifiée des politiques de sécurité pour réseaux SDN</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Carte Projet 2 -->
+    <article class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2 shadow-xl shadow-indigo-900/10">
+      <div class="relative h-80">
+        <img 
+          src="/src/image/donneProjet.png" 
+          alt="Tableau de bord d'analyse de données sécurisées" 
+          class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 text-left">
+          <h3 class="text-xl font-bold text-white mb-2">DataGuard CI/CD</h3>
+          <p class="text-gray-300 line-clamp-2">Solution d'analyse statique de code intégrée aux pipelines de déploiement</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Section Témoignages -->
+<section class="py-24 px-5 mx-auto max-w-7xl" id="testimonials" aria-label="Témoignages clients">
+  <!--le titre)-->
+  <div class="text-center mb-16">
+    <p class="text-indigo-400/80 font-mono uppercase tracking-widest mb-4 animate-fade-in">
+      Ils nous font confiance
+    </p>
+    <h2 class="text-4xl md:text-5xl font-bold text-white">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300 animate-gradient-shift">
+        Témoignages
+      </span> Clients
+    </h2>
+  </div>
+
+  <!-- Carrousel Swiper amélioré -->
+  <div class="swiper testimonialSwiper relative group" data-swiper-autoplay="5000">
+    <div class="swiper-wrapper">
+       <!-- Témoignage 1 -->
+       <article class="swiper-slide" role="group" aria-label="Témoignage 1 sur 4">
+        <div class="flex flex-col items-center bg-gradient-to-br from-gray-800/50 to-gray-900/20 rounded-2xl p-8 h-full border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2">
+          <div class="relative w-20 h-20 mb-6 group">
+            <div class="absolute inset-0 rounded-full bg-indigo-400/10 animate-pulse-slow"></div>
+            <img 
+              src="/src/image/1-client.png" 
+              alt="Portrait de Malang Faty, Ingénieur Exécutif" 
+              class="rounded-full border-2 border-indigo-400/80 object-cover w-full h-full transform group-hover:scale-105 transition-transform"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          </div>
+          <blockquote class="text-gray-300 text-lg leading-relaxed text-center mb-6 max-w-2xl relative">
+            <span class="absolute -left-4 -top-4 text-indigo-400/30 text-5xl font-serif">“</span>
+            <p class="relative z-10">Expertise exceptionnelle en sécurité réseau. Leur solution HiSec a révolutionné notre infrastructure avec un temps d'arrêt minimal lors du déploiement.</p>
+            <span class="absolute -right-4 -bottom-4 text-indigo-400/30 text-5xl font-serif">”</span>
+          </blockquote>
+          <div class="mt-auto text-center space-y-2">
+            <h3 class="text-white font-bold text-xl">Malang Faty</h3>
+            <p class="text-indigo-300/80 text-sm">CTO @CyberSecure</p>
+            <div class="flex justify-center items-center space-x-1 mt-2">
+              <!-- Étoiles de notation -->
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span class="text-gray-400 text-sm">5.0</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Témoignage 2 -->
+      <article class="swiper-slide" role="group" aria-label="Témoignage 2 sur 4">
+        <div class="flex flex-col items-center bg-gradient-to-br from-gray-800/50 to-gray-900/20 rounded-2xl p-8 h-full border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2">
+          <div class="relative w-20 h-20 mb-6 group">
+            <div class="absolute inset-0 rounded-full bg-indigo-400/10 animate-pulse-slow"></div>
+            <img 
+              src="/src/image/2-client.png" 
+              alt="Portrait de Marie Ndiaye, Directrice Technique" 
+              class="rounded-full border-2 border-indigo-400/80 object-cover w-full h-full transform group-hover:scale-105 transition-transform"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          </div>
+          <blockquote class="text-gray-300 text-lg leading-relaxed text-center mb-6 max-w-2xl relative">
+            <span class="absolute -left-4 -top-4 text-indigo-400/30 text-5xl font-serif">“</span>
+            <p class="relative z-10">Réponse rapide et professionnelle lors de notre incident de sécurité. Leur équipe a résolu le problème en moins de 2 heures avec une communication transparente.</p>
+            <span class="absolute -right-4 -bottom-4 text-indigo-400/30 text-5xl font-serif">”</span>
+          </blockquote>
+          <div class="mt-auto text-center space-y-2">
+            <h3 class="text-white font-bold text-xl">Aïssatou Diallo</h3>
+            <p class="text-indigo-300/80 text-sm">Responsable Sécurité @BankSA</p>
+            <div class="flex justify-center items-center space-x-1 mt-2">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span class="text-gray-400 text-sm">4.9</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Témoignage 3 -->
+      <article class="swiper-slide" role="group" aria-label="Témoignage 3 sur 4">
+        <div class="flex flex-col items-center bg-gradient-to-br from-gray-800/50 to-gray-900/20 rounded-2xl p-8 h-full border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2">
+          <div class="relative w-20 h-20 mb-6 group">
+            <div class="absolute inset-0 rounded-full bg-indigo-400/10 animate-pulse-slow"></div>
+            <img 
+              src="/src/image/3-client.png" 
+              alt="Portrait de Omar Sy, Directeur Technique" 
+              class="rounded-full border-2 border-indigo-400/80 object-cover w-full h-full transform group-hover:scale-105 transition-transform"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          </div>
+          <blockquote class="text-gray-300 text-lg leading-relaxed text-center mb-6 max-w-2xl relative">
+            <span class="absolute -left-4 -top-4 text-indigo-400/30 text-5xl font-serif">“</span>
+            <p class="relative z-10">Audit de sécurité complet et détaillé. Le rapport final contenait des recommandations actionnables qui ont boosté notre conformité RGPD.</p>
+            <span class="absolute -right-4 -bottom-4 text-indigo-400/30 text-5xl font-serif">”</span>
+          </blockquote>
+          <div class="mt-auto text-center space-y-2">
+            <h3 class="text-white font-bold text-xl">Oumar Kane</h3>
+            <p class="text-indigo-300/80 text-sm">DPO @HealthTech</p>
+            <div class="flex justify-center items-center space-x-1 mt-2">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span class="text-gray-400 text-sm">5.0</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Témoignage 4 -->
+      <article class="swiper-slide" role="group" aria-label="Témoignage 4 sur 4">
+        <div class="flex flex-col items-center bg-gradient-to-br from-gray-800/50 to-gray-900/20 rounded-2xl p-8 h-full border border-white/10 hover:border-indigo-400/30 transition-all duration-300 hover:-translate-y-2">
+          <div class="relative w-20 h-20 mb-6 group">
+            <div class="absolute inset-0 rounded-full bg-indigo-400/10 animate-pulse-slow"></div>
+            <img 
+              src="/src/image/4-client.png" 
+              alt="Portrait de Fatoumata Bâ, Cheffe de Projet" 
+              class="rounded-full border-2 border-indigo-400/80 object-cover w-full h-full transform group-hover:scale-105 transition-transform"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          </div>
+          <blockquote class="text-gray-300 text-lg leading-relaxed text-center mb-6 max-w-2xl relative">
+            <span class="absolute -left-4 -top-4 text-indigo-400/30 text-5xl font-serif">“</span>
+            <p class="relative z-10">Formation personnalisée pour nos équipes techniques. Les exercices pratiques ont considérablement amélioré nos compétences en cybersécurité.</p>
+            <span class="absolute -right-4 -bottom-4 text-indigo-400/30 text-5xl font-serif">”</span>
+          </blockquote>
+          <div class="mt-auto text-center space-y-2">
+            <h3 class="text-white font-bold text-xl">Aminata Diop</h3>
+            <p class="text-indigo-300/80 text-sm">Cheffe de Projet @GovTech</p>
+            <div class="flex justify-center items-center space-x-1 mt-2">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span class="text-gray-400 text-sm">4.8</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Pagination -->
+    <div class="swiper-pagination !relative mt-12 [--swiper-pagination-bullet-size:10px] [--swiper-pagination-color:theme(colors.indigo.400)]"></div>
+
+    <!-- Contrôles verticaux -->
+    <div class="swiper-controls-vertical">
+      <button class="swiper-button-prev-vertical">
+        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+        </svg>
+      </button>
+      <button class="swiper-button-next-vertical">
+        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- contact -->
+<!-- Section Contact -->
+<section id="contact" class="relative py-24 bg-gray-900 pattern-dark" aria-labelledby="contact-heading">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Pattern décoratif -->
+    <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJub25lIiBzdHJva2U9IiMzODQwNDgiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==')]"></div>
+    
+    <div class="relative">
+      <div class="text-center mb-16">
+        <h2 id="contact-heading" class="text-4xl font-bold text-white mb-4">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-300">Contact</span> Professionnel
+        </h2>
+        <p class="text-gray-400 max-w-xl mx-auto">Discutons de la sécurisation de votre infrastructure</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <!-- Formulaire amélioré -->
+        <form class="space-y-6">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div class="form-group relative">
+              <input 
+                type="text" 
+                id="name" 
+                required
+                class="form-input peer pl-10 pr-4 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900/30 text-gray-300 placeholder-transparent transition-all duration-200"
+                placeholder=" "
+              >
+              <label for="name" class="form-label">Nom complet</label>
+              <i class='bx bx-user text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 peer-focus:text-indigo-400 transition-colors'></i>
+            </div>
+            
+            <div class="form-group relative">
+              <input 
+                type="email" 
+                id="email" 
+                required
+                class="form-input peer pl-10 pr-4 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900/30 text-gray-300 placeholder-transparent transition-all duration-200"
+                placeholder=" "
+              >
+              <label for="email" class="form-label">Adresse email</label>
+              <i class='bx bx-envelope text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 peer-focus:text-indigo-400 transition-colors'></i>
+            </div>
+          </div>
+      
+          <div class="form-group relative">
+            <input 
+              type="text" 
+              id="subject" 
+              required
+              class="form-input peer pl-10 pr-4 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900/30 text-gray-300 placeholder-transparent transition-all duration-200"
+              placeholder=" "
+            >
+            <label for="subject" class="form-label">Sujet du message</label>
+            <i class='bx bx-comment-detail text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 peer-focus:text-indigo-400 transition-colors'></i>
+          </div>
+      
+          <div class="form-group relative">
+            <textarea 
+              id="message" 
+              rows="4" 
+              required
+              class="form-input peer pl-10 pr-4 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900/30 text-gray-300 placeholder-transparent transition-all duration-200 resize-none"
+              placeholder=" "
+            ></textarea>
+            <label for="message" class="form-label">Votre message</label>
+            <i class='bx bx-edit text-gray-500 absolute left-3 top-6 peer-focus:text-indigo-400 transition-colors'></i>
+          </div>
+      
+          <button 
+            type="submit" 
+            class="w-full btn-primary group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/20"
+          >
+            <span class="relative z-10 flex items-center justify-center">
+              Envoyer le message
+              <i class='bx bx-send text-xl ml-2 transition-transform group-hover:translate-x-1'></i>
+            </span>
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </button>
+        </form>
+      
+        <!-- Informations de contact améliorées -->
+        <div class="space-y-8 lg:pl-12">
+          <div class="p-8 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 hover:border-indigo-500/20 transition-all hover:-translate-y-1 group">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center transition-colors group-hover:bg-indigo-500/20">
+                <i class='bx bx-envelope text-2xl text-indigo-400 group-hover:text-indigo-300'></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-white mb-2">Email</h3>
+                <a href="mailto:contact@cybersecpro.com" class="text-indigo-400 hover:text-indigo-300 transition-colors">
+                  contact@cybersecpro.com
+                </a>
+              </div>
+            </div>
+          </div>
+      
+          <div class="p-8 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 hover:border-indigo-500/20 transition-all hover:-translate-y-1 group">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center transition-colors group-hover:bg-indigo-500/20">
+                <i class='bx bx-phone text-2xl text-indigo-400 group-hover:text-indigo-300'></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-white mb-2">Téléphone</h3>
+                <a href="tel:+33123456789" class="text-indigo-400 hover:text-indigo-300 transition-colors">
+                  +33 1 23 45 67 89
+                </a>
+              </div>
+            </div>
+          </div>
+      
+          <div class="p-8 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 transition-all hover:-translate-y-1">
+            <h3 class="text-lg font-semibold text-white mb-4">Disponibilités</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex items-center gap-2 hover:text-indigo-400 transition-colors">
+                <i class='bx bx-time-five text-indigo-400'></i>
+                Lundi - Vendredi : 9h - 18h
+              </li>
+              <li class="flex items-center gap-2 hover:text-indigo-400 transition-colors">
+                <i class='bx bx-map text-indigo-400'></i>
+                Paris, France (UTC+1)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Statistiques de performance -->
+<section class="py-24 px-4 sm:px-6 lg:px-8 bg-gray-900">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="text-indigo-400/80 font-mono uppercase tracking-widest mb-4 animate-fade-in">
+        Mesures d'efficacité
+      </p>
+      <h2 class="text-4xl md:text-5xl font-bold text-white">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300 animate-gradient-shift">
+          Performances
+        </span> Opérationnelles
+      </h2>
+    </div>
+
+    <!-- Conteneur du diagramme -->
+    <div class="relative bg-gray-800/30 rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-indigo-400/30 transition-all duration-500 group">
+      <canvas id="performanceChart" 
+              class="w-full h-[400px] md:h-[500px]"
+              aria-label="Diagramme des performances de sécurité"
+              role="img"></canvas>
+      
+      <!-- Légende interactive -->
+      <div class="mt-6 flex flex-wrap gap-4 justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div class="flex items-center gap-2 text-indigo-400">
+          <span class="w-3 h-3 bg-indigo-400 rounded-full"></span>
+          <span class="text-sm">Audits de sécurité</span>
+        </div>
+        <!-- Ajouter d'autres légendes selon les datasets -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-gray-900 border-t border-gray-800 mt-24 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-12 gap-10 lg:gap-12">
+      <!-- Colonne Logo + Description -->
+      <div class="md:col-span-6 lg:col-span-4">
+        <div class="flex items-center gap-4 mb-6 group">
+          <a href="#home" class="hover:opacity-80 transition-opacity">
+            <img src="/src/image/--logo--.png" 
+                 alt="CyberSecPro - Retour à l'accueil" 
+                 class="h-14 w-14 rounded-lg border-2 border-gray-700 hover:border-indigo-500 transition-colors"
+                 loading="lazy"
+                 width="56"
+                 height="56">
+          </a>
+          <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-400 hover:from-indigo-300 hover:to-blue-300 transition-colors">
+            CyberSecPro
+          </span>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed max-w-xs">
+          Solutions de cybersécurité sur mesure pour protéger vos actifs numériques.
+          <span class="block mt-2 text-indigo-400">Certifié ISO 27001</span>
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="md:col-span-3 lg:col-span-2">
+        <h3 class="text-gray-100 font-semibold mb-5 text-lg">Navigation</h3>
+        <nav>
+          <ul class="space-y-3">
+            <li><a href="#home" class="footer-link hover:text-indigo-400">Accueil</a></li>
+            <li><a href="#projects" class="footer-link hover:text-indigo-400">Projets</a></li>
+            <li><a href="#contact" class="footer-link hover:text-indigo-400">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Légal -->
+      <div class="md:col-span-3 lg:col-span-2">
+        <h3 class="text-gray-100 font-semibold mb-5 text-lg">Légal</h3>
+        <nav>
+          <ul class="space-y-3">
+            <li><a href="/confidentialite" class="footer-link hover:text-indigo-400">Confidentialité</a></li>
+            <li><a href="/mentions-legales" class="footer-link hover:text-indigo-400">Mentions légales</a></li>
+            <li><a href="/conditions" class="footer-link hover:text-indigo-400">Conditions d'utilisation</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="md:col-span-12 lg:col-span-4">
+        <h3 class="text-gray-100 font-semibold mb-5 text-lg">Restez informé</h3>
+        <form class="space-y-4" aria-label="Formulaire d'inscription à la newsletter">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input type="email" 
+                   id="newsletter-email" 
+                   required
+                   aria-required="true"
+                   placeholder="Votre email professionnel" 
+                   class="flex-1 px-4 py-3 bg-gray-800 border-2 border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-100 placeholder-gray-400 outline-none transition-all hover:border-gray-600 focus:border-indigo-500">
+            <button type="submit" 
+                    class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg hover:from-indigo-700 hover:to-blue-600 transition-all font-medium shadow-lg hover:shadow-indigo-500/20">
+              S'abonner
+            </button>
+          </div>
+          <p class="text-gray-400 text-xs">
+            En vous abonnant, vous acceptez notre 
+            <a href="/confidentialite" class="text-indigo-400 hover:underline underline-offset-2">politique de confidentialité</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Social + Copyright -->
+    <div class="border-t border-gray-800 mt-12 pt-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex space-x-6">
+          <a href="#" class="social-icon hover:-translate-y-1 transition-transform" aria-label="LinkedIn">
+            <svg class="w-7 h-7 text-gray-400 hover:text-indigo-400 transition-colors" fill="currentColor" viewBox="0 0 24 24" role="img">
+              <title>LinkedIn</title>
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon hover:-translate-y-1 transition-transform" aria-label="Twitter">
+            <svg class="w-7 h-7 text-gray-400 hover:text-indigo-400 transition-colors" fill="currentColor" viewBox="0 0 24 24" role="img">
+              <title>Twitter</title>
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+        </div>
+        <p class="text-gray-400 text-sm text-center md:text-right">
+          © 2024 CyberSecPro. Tous droits réservés<br>
+          <span class="text-xs text-gray-500">SIRET: 123 456 789 00010</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <!-- scripts js -->
+  <script src="script.js"></script>
+  <script src="preview.js"></script>
+  <!-- Script Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
