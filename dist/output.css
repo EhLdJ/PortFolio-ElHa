@@ -554,10 +554,6 @@ video {
   position: absolute;
 }
 
-.\!relative {
-  position: relative !important;
-}
-
 .relative {
   position: relative;
 }
@@ -794,6 +790,10 @@ video {
   height: 100%;
 }
 
+.h-1 {
+  height: 0.25rem;
+}
+
 .max-h-0 {
   max-height: 0px;
 }
@@ -848,6 +848,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-1 {
+  width: 0.25rem;
 }
 
 .max-w-2xl {
@@ -1627,14 +1631,6 @@ video {
 
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-
-.\[--swiper-pagination-bullet-size\:10px\] {
-  --swiper-pagination-bullet-size: 10px;
-}
-
-.\[--swiper-pagination-color\:theme\(colors\.indigo\.400\)\] {
-  --swiper-pagination-color: #818cf8;
 }
 
 /* contact complement */

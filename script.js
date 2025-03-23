@@ -8,12 +8,17 @@ const initMobileMenu = () => {
   const toggleMenu = () => {
     const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
     menuButton.setAttribute('aria-expanded', !isExpanded);
-    document.body.classList.toggle('overflow-hidden', !isExpanded);
-    mobileMenu.classList.toggle('hidden');
-    mobileMenu.classList.toggle('opacity-0');
-    mobileMenu.classList.toggle('opacity-100');
-    mobileMenu.classList.toggle('translate-y-4');
-    mobileMenu.classList.toggle('translate-y-0');
+
+    // Gestion de l'affichage du menu mobile
+    if (isExpanded) {
+      // Fermer le menu
+      mobileMenu.style.maxHeight = '0';
+      mobileMenu.style.opacity = '0';
+    } else {
+      // Ouvrir le menu
+      mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+      mobileMenu.style.opacity = '1';
+    }
   };
 
   menuButton.addEventListener('click', toggleMenu);
@@ -26,8 +31,9 @@ const initMobileMenu = () => {
   // Gestion du redimensionnement
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 768) {
-      document.body.classList.remove('overflow-hidden');
-      mobileMenu.classList.add('hidden');
+      // Réinitialiser le menu mobile lors du redimensionnement
+      mobileMenu.style.maxHeight = '';
+      mobileMenu.style.opacity = '';
       menuButton.setAttribute('aria-expanded', 'false');
     }
   });
